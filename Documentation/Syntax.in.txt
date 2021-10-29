@@ -1,0 +1,47 @@
+2. Syntax:
+
+The words - predefined tokens are specified between " and ":
+
+Sintactical rules: (file Syntax.in)
+
+program ::= "<head>" decllist "</head>" "<body>" cmpdstmt "</body>"
+
+decllist ::= declaration | declaration ";" decllist
+
+declaration ::= type identifier"=" value
+
+type1 ::= "bool" | "char" | "int" | "float"
+
+arraydecl ::= type identifier = "[" nr"]"
+
+type  ::= type1|arraydecl
+
+cmpdstmt ::= stmtlist
+
+stmtlist ::= stmt | stmt ";" stmtlist
+
+stmt ::= simplstmt | structstmt
+
+simplstmt ::= assignstmt | iostmt
+
+assignstmt ::= IDENTIFIER "=" expression
+
+expression ::= expression "+" term | term
+
+term ::= term "*" factor | factor
+
+factor ::= "(" expression ")" | IDENTIFIER
+
+iostmt ::= "input" | "Log" "(" IDENTIFIER ")"
+
+structstmt ::= cmpdstmt | ifstmt | whilestmt | forstmt 
+
+ifstmt ::= "IF" "(" condition ")" "{" stmt "}"  ["ELSE" "{" stmt "}"]
+
+whilestmt ::= "WHILE" "(" condition ")" "{" stmt "}"
+
+forstmt ::= "FOR" "(" assignstmt ";" condition ";" assignstmt")" "{" stmt "}"
+
+condition ::= expression RELATION expression
+
+RELATION ::=  "equal" | "notEqual" | "lessThan" | "greaterThan" | "lessOrEqualThan" | "greaterOrEqualThan"

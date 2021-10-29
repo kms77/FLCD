@@ -1,0 +1,50 @@
+Language Specification
+
+Alphabet: 
+- we have upper(A-Z) and lower case letters(a-z) of the English alphabet
+- underline character '_'
+- decimal digits(0-9)
+
+1.Lexic
+a)Special symbols: 
+
+-operators: "plus" "minus" "div" "mod", "equal" "notEqual" "lessThan" "greaterThan" "lessOrEqualThan" "greaterOrEqualThan"
+-separators [] {} : ; space
+-reserved words:
+int, String, float, plus, minus, times, div, mod, equal, notEqual, 
+lessThan, greaterThan, lessOrEqualThan, greaterOrEqualThan, and, 
+or, console, input, head, body, if, for, while, do, return, else
+const
+
+b)identifiers
+-sequence of letters and  digits, the first character is a letter or underline; the rule is:
+
+-identifier ::= letter | letter{letter}{digit} | _letter{letter}{digit}
+
+-letter ::= "a" | "b" | . ..| "z" | "A" | "B" | . ..| "Z"
+
+-digit ::= "0" | "1" |...| "9"
+    
+c) constants 
+
+1.Integer
+
+  noconst :=+non_zero_number|-non_zero_number|non_zero_number|"0"
+  non_zero_digit := "1"|"2"|....|"9"
+  non_zero_number := non_zero_digit{digit}
+  digit := "0"|"1"|....|"9"
+
+2.Character
+
+  character:='letter'|'digit'
+
+3.String
+
+      constchar:="string"
+
+      string:=char{string}
+
+      char:=letter|digit
+
+
+
