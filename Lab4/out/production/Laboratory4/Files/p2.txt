@@ -1,0 +1,17 @@
+<head>
+ int numberOfInputs = input ();
+ int currentIndex = 0;
+ int maxNumber = 0;
+ int currentNumber = 0;
+</head>
+<body>
+for (currentIndex = 0; currentIndex lessOrEqualThan numberOfInputs; currentIndex= currentIndex plus 1)
+ {
+ currentNumber = input ();
+ if (currentNumber greaterThan maxNumber)
+ {
+ maxNumber = currentNumber;
+ }
+ }
+ Log (maxNumber);
+</body>

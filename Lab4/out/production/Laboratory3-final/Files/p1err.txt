@@ -1,0 +1,11 @@
+<head>
+ int FirstNumber = input ();
+ int SecondNumber = input ();
+ String $Result;
+ int productResult = 0;
+</head>
+<body>
+ productResult = FirstNumber times SecondNumber;
+ Log (Result, productResult);
+</body>
+
