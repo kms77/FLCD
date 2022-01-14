@@ -1,0 +1,147 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+
+#define YYDEBUG 1
+%}
+
+
+
+%token HEAD
+%token BODY
+%token INT
+%token FLOAT
+%token BOOL
+%token IF
+%token WHILE
+%token FOR
+%token THEN
+%token ELSE
+%token CLOSE_HEAD
+%token CLOSE_BODY
+%token ENDIF
+%token ENDWHILE
+%token ENDFOR
+%token AND
+%token OR
+%token STRING
+
+
+%token IDENTIFIER
+%token CONST
+
+%token ATRIB
+%token EQ
+%token NE
+%token LE
+%token GE
+%token LT
+%token GT
+%token NOT
+
+%token DOT
+
+%left '+' '-' '*' '/'
+
+%token PLUS
+%token MINUS
+%token DIV
+%token MOD
+%token MUL
+
+%token OPEN_CURLY_BRACKET
+%token CLOSED_CURLY_BRACKET
+%token OPEN_ROUND_BRACKET
+%token CLOSED_ROUND_BRACKET
+%token OPEN_RIGHT_BRACKET
+%token CLOSED_RIGHT_BRACKET
+
+%token INPUT
+%token LOG
+%token RETURN
+%token COMMA
+%token SEMI_COLON
+%token COLON
+%token SPACE
+
+%start program
+%%
+
+program : HEAD decllist CLOSE_HEAD BODY cmpdstmt CLOSE_BODY
+                ;
+decllist : declaration | declaration decllist
+                                  ;
+declaration :  type IDENTIFIER SEMI_COLON | type IDENTIFIER ATRIB expression SEMI_COLON
+                        | type IDENTIFIER ATRIB iostmt SEMI_COLON
+                                ;
+type :  INT | STRING |BOOL |FLOAT | typeTemp
+                     ;
+typeTemp : type OPEN_RIGHT_BRACKET CLOSED_RIGHT_BRACKET
+                                   ;
+stmtlist :  stmt | stmt stmtlist
+                                   ;
+cmpdstmt : stmtlist
+         ;
+stmt :  simplstmt SEMI_COLON | structstmt
+                    ;
+simplstmt :  assignstmt | iostmt
+          ;
+assignstmt : IDENTIFIER ATRIB expression
+                      | IDENTIFIER ATRIB iostmt
+           ;
+expression : arithmetic2 arithmetic1
+                                                    ;
+arithmetic1 : PLUS arithmetic2 arithmetic1 | MINUS arithmetic2 arithmetic1 | /*Empty*/
+                                                        ;
+arithmetic2 : multiply2 multiply1
+                                                        ;
+
+
+multiply1 : MUL multiply2 multiply1 | DIV multiply2 multiply1 | /*Empty*/
+                                                ;
+multiply2 : OPEN_ROUND_BRACKET expression CLOSED_ROUND_BRACKET | CONST | IDENTIFIER | IndexedIdentifier
+                                                ;
+IndexedIdentifier :  IDENTIFIER OPEN_ROUND_BRACKET CONST CLOSED_ROUND_BRACKET |
+                                                     IDENTIFIER OPEN_ROUND_BRACKET IDENTIFIER CLOSED_ROUND_BRACKET
+        ;
+iostmt : readstmt | writestmt
+                     ;
+readstmt: INPUT OPEN_ROUND_BRACKET CLOSED_ROUND_BRACKET
+                | INPUT OPEN_ROUND_BRACKET IDENTIFIER CLOSED_ROUND_BRACKET
+        | INPUT OPEN_ROUND_BRACKET CONST CLOSED_ROUND_BRACKET
+                ;
+writestmt: LOG OPEN_ROUND_BRACKET IDENTIFIER CLOSED_ROUND_BRACKET
+                  | LOG OPEN_ROUND_BRACKET CONST CLOSED_ROUND_BRACKET
+                         ;
+structstmt : ifstmt | whilestmt | forstmt
+                                         ;
+ifstmt :  IF OPEN_ROUND_BRACKET boolean_condition CLOSED_ROUND_BRACKET OPEN_CURLY_BRACKET stmtlist CLOSED_CURLY_BRACKET tempIf
+                            ;
+tempIf :/*Empty*/ | ELSE OPEN_CURLY_BRACKET stmtlist CLOSED_CURLY_BRACKET
+                            ;
+forstmt :  FOR forheader OPEN_CURLY_BRACKET stmtlist CLOSED_CURLY_BRACKET
+                               ;
+forheader :  OPEN_ROUND_BRACKET assignstmt SEMI_COLON boolean_condition SEMI_COLON assignstmt CLOSED_ROUND_BRACKET                  ;
+                    whilestmt :  WHILE OPEN_ROUND_BRACKET boolean_condition CLOSED_ROUND_BRACKET OPEN_CURLY_BRACKET stmtlist CLOSED_CURLY_BRACKET
+             ;
+condition : expression relation expression
+          ;
+relation : GT | GE | LT | LE | EQ | NE
+         ;
+boolean_condition : condition boolean_cond_temp
+                                                                      ;
+boolean_cond_temp : /*Empty*/ | AND boolean_condition | OR boolean_condition
+                                    ;
+%%
+yyerror(char *s)
+{
+        printf("%s\n",s);
+}
+extern FILE *yyin;
+
+main(int argc, char **argv)
+{
+        if(argc>1) yyin :  fopen(argv[1],"r");
+        //if(argc>2 && !strcmp(argv[2],"-d")) yydebug: 1;
+        if(!yyparse()) fprintf(stderr, "\tO.K.\n");
+}
